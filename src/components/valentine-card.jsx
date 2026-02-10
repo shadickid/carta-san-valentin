@@ -16,14 +16,25 @@ import hentai5 from '/characters/hentai5.webp';
 import hentai6 from '/characters/hentai6.webp';
 import hentai8 from '/characters/hentai8.jpg';
 import hentai9 from '/characters/hentai9.png';
+import hentai10 from '/characters/hentai10.jpg';
+import hentai11 from '/characters/hentai11.jpg';
 import junjiito1 from '/characters/junjiito1.jpg';
 import junjiito2 from '/characters/junjiito2.jpg';
 import junjiito3 from '/characters/junjiito3.jpg';
+import junjiito4 from '/characters/junjiito5.jpg';
 import maomao1 from '/characters/maomao1.jpg';
 import maomao2 from '/characters/maomao2.jpg';
 import mitsuri1 from '/characters/mitsuri1.jpg';
 import mitsuri2 from '/characters/mitsuri2.jpg';
+import mitsuri3 from '/characters/mitsuri3.jpg';
 import yumeko1 from '/characters/yumeko1.jpg';
+import senku from '/characters/senku.jpg';
+import toji from '/characters/toji.jpg';
+import sunkenrock1 from '/characters/sunkenrock1.jpg';
+import loquita from '/characters/loquita.jpg';
+import kuromi2 from '/characters/kuromi2.png';
+import kuromi3 from '/characters/kuromi3.png';
+import kuromi4 from '/characters/kuromi4.png';
 
 const ValentineCard = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
@@ -31,8 +42,11 @@ const ValentineCard = () => {
   const [kuromiMode, setKuromiMode] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const audioRef = React.useRef(null);
-
+  const kuromiImages = [kuromi4, kuromi2, kuromi3];
+  
   // ⏰ FECHA DE REENCUENTRO - 12 de julio 2024
   const reunionDate = new Date(2024, 6, 12); 
 
@@ -72,13 +86,85 @@ const ValentineCard = () => {
     { img: <img src={maomao2} alt="maomao2" className="w-full h-full object-cover" />, id: 'char21' },
     { img: <img src={mitsuri1} alt="mitsuri1" className="w-full h-full object-cover" />, id: 'char22' },
     { img: <img src={yumeko1} alt="yumeko1" className="w-full h-full object-cover" />, id: 'char23' },
+    { img: <img src={junjiito4} alt="junjiito4" className="w-full h-full object-cover" />, id: 'char24' },
+    { img: <img src={mitsuri3} alt="mitsuri3" className="w-full h-full object-cover" />, id: 'char25' },
+    { img: <img src={hentai10} alt="hentai10" className="w-full h-full object-cover" />, id: 'char26' },
+    { img: <img src={hentai11} alt="hentai11" className="w-full h-full object-cover" />, id: 'char27' },
+    { img: <img src={senku} alt="senku" className="w-full h-full object-cover" />, id: 'char28' },
+    { img: <img src={toji} alt="toji" className="w-full h-full object-cover" />, id: 'char29' },
+    { img: <img src={sunkenrock1} alt="senku" className="w-full h-full object-cover" />, id: 'char30' },
+    { img: <img src={loquita} alt="loquita" className="w-full h-full object-cover" />, id: 'char31' },
   ];
+
+  // 📸 FOTOS CON MARA
+  const photoGalleries = {
+    gallery1: [
+      '/characters/mara1.jpg',
+      '/characters/mara11.jpg',
+      '/characters/mara3.jpg',
+    ],
+    gallery2: [
+      '/characters/mara7.jpg',
+      '/characters/mara4.jpg',
+      '/characters/mara5.jpg',
+    ],
+    gallery3: [
+      '/characters/mara14.jpg',
+      '/characters/mara12.jpg',
+      '/characters/mara13.jpg',
+    ]
+  };
+
+  // 🖼️ SISTEMA DE PRECARGA DE IMÁGENES
+  useEffect(() => {
+    const imagesToPreload = [
+      // Personajes importados
+      kuromi, tomie, emergencychar, zenitsu, zenitsu2, fern1, fern2,
+      hentai1, hentai2, hentai3, hentai4, hentai5, hentai6, hentai8, hentai9,
+      hentai10, hentai11, junjiito1, junjiito2, junjiito3, junjiito4,
+      maomao1, maomao2, mitsuri1, mitsuri2, mitsuri3, yumeko1,
+      senku, toji, sunkenrock1, loquita, kuromi2, kuromi3, kuromi4,
+      // Fotos de galerías
+      ...photoGalleries.gallery1,
+      ...photoGalleries.gallery2,
+      ...photoGalleries.gallery3,
+      // Foto del regalo
+      '/images/my-photo-heart.jpg'
+    ];
+
+    let loadedCount = 0;
+    const totalImages = imagesToPreload.length;
+
+    const preloadImage = (src) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          loadedCount++;
+          setLoadingProgress(Math.round((loadedCount / totalImages) * 100));
+          resolve();
+        };
+        img.onerror = () => {
+          console.warn(`Failed to load: ${src}`);
+          loadedCount++;
+          setLoadingProgress(Math.round((loadedCount / totalImages) * 100));
+          resolve(); // Continuar aunque falle
+        };
+        img.src = src;
+      });
+    };
+
+    Promise.all(imagesToPreload.map(src => preloadImage(src)))
+      .then(() => {
+        setTimeout(() => {
+          setImagesLoaded(true);
+        }, 500); // Pequeño delay para transición suave
+      });
+  }, []);
 
   // 🎲 Función para obtener personajes únicos sin repetir (con reciclaje)
   const getUniqueCharacters = (usedIds) => {
     let available = allCharacters.filter(char => !usedIds.includes(char.id));
     
-    // Si no quedan personajes disponibles, reiniciar el pool
     if (available.length < 6) {
       available = [...allCharacters];
     }
@@ -158,25 +244,6 @@ const ValentineCard = () => {
     bubblegum: themes.blackPink
   };
 
-  // 📸 FOTOS CON MARA - Agrega las rutas de tus fotos aquí
-  const photoGalleries = {
-    gallery1: [
-      '/characters/mara1.jpg',  // Puedes usar /characters/ si tus fotos están ahí
-      '/characters/mara2.jpg',
-      '/characters/mara3.jpg',
-    ],
-    gallery2: [
-      '/images/mara/foto4.jpg',  // O /images/mara/ si prefieres
-      '/images/mara/foto5.jpg',
-      '/images/mara/foto6.jpg',
-    ],
-    gallery3: [
-      '/images/mara/foto7.jpg',
-      '/images/mara/foto8.jpg',
-      '/images/mara/foto9.jpg',
-    ]
-  };
-
   // 🎵 GENERAR CARTAS CON PERSONAJES ÚNICOS
   const generateCards = () => {
     const cards = [];
@@ -187,23 +254,23 @@ const ValentineCard = () => {
     used = [...used, ...chars1.map(c => c.id)];
     cards.push({
       id: 1,
-      title: "Para Ti",
-      message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      title: "Mara",
+      message: "Con vos sentí cosas que no me pasaron con nadie más no por lo perfecto, sino por lo real.Me gustaste cuando estabas bien y también cuando estabas hecha un caos.Me importás sin condiciones y sin promesas y aun así con todo el amor que me nace",
       theme: kuromiMode ? kuromiThemes.kawaii : themes.blackPink,
       characters: chars1,
       musicTimestamp: 0
     });
 
-    // Carta 2 - HORROR (sin clímax)
+    // Carta 2
     const chars2 = getUniqueCharacters(used);
     used = [...used, ...chars2.map(c => c.id)];
     cards.push({
       id: 2,
-      title: "Horror Love",
-      message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      title: "Marita",
+      message: "Hay una versión tuya que aparece en los detalles chicos: en cómo mirás,en cómo te reís sin darte cuenta, en cómo te enojás y a los cinco minutos ya no. Esa versión tuya es la que se me quedó en el pecho.",
       theme: kuromiMode ? kuromiThemes.pastel : themes.horror,
       characters: chars2,
-      musicTimestamp: 0  // Sin clímax aquí
+      musicTimestamp:0
     });
 
     // Carta 3 - GALERÍA 1 📸 (CON CLÍMAX)
@@ -215,7 +282,7 @@ const ValentineCard = () => {
       message: "Cada foto guarda un recuerdo especial de nosotros.",
       theme: kuromiMode ? kuromiThemes.kawaii : themes.blackPink,
       characters: chars3,
-      musicTimestamp: 123,  // 🔥 CLÍMAX en esta carta
+      musicTimestamp: 124,
       isPhotoGallery: true,
       photos: photoGalleries.gallery1
     });
@@ -225,8 +292,8 @@ const ValentineCard = () => {
     used = [...used, ...chars4.map(c => c.id)];
     cards.push({
       id: 4,
-      title: "Purple Dreams",
-      message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      title: "Sangrona",
+      message: "Me enamoré incluso de tu carácter. De tu forma de decir las cosas, de no maquillarlas, de ser intensa cuando algo te importa. Nunca quise que seas distinta. Solo quise aprender a querer lo que ya sos..",
       theme: kuromiMode ? kuromiThemes.lavender : themes.purple,
       characters: chars4,
       musicTimestamp: 0
@@ -251,30 +318,41 @@ const ValentineCard = () => {
     used = [...used, ...chars6.map(c => c.id)];
     cards.push({
       id: 6,
-      title: "Gothic Romance",
-      message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      title: "Enojona",
+      message: "A veces no te entiendo, y está bien. Porque querer a alguien no es comprenderlo todo, es elegirlo incluso cuando no se entiende. Y yo, en ese tiempo, te elegí",
       theme: kuromiMode ? kuromiThemes.magenta : themes.gothic,
       characters: chars6,
       musicTimestamp: 0
     });
-
-    // Carta 7 - GALERÍA 3 📸
+    
     const chars7 = getUniqueCharacters(used);
     used = [...used, ...chars7.map(c => c.id)];
     cards.push({
       id: 7,
-      title: "Juntos Siempre 💖",
-      message: "Cada momento contigo es un tesoro.",
-      theme: kuromiMode ? kuromiThemes.pastel : themes.purple,
+      title: "Mi pequeño microbio",
+      message: "Tenés esa forma tuya de hacerte la distraída mientras se me van los ojos a tus tetas y a cómo se te marca el culo sin ningún pudor. Tu ropa interior no es casualidad, es mensaje. Y esa parte tuya un poco exhibicionista, un poco pervertida, a mí me encanta.Jugás a provocar como si no importara, pero sabés muy bien lo que hacés y cómo me dejás.",
+      theme: kuromiMode ? kuromiThemes.magenta : themes.gothic,
       characters: chars7,
+      musicTimestamp: 0
+    });
+
+    // Carta 7 - GALERÍA 3 📸
+    const chars8 = getUniqueCharacters(used);
+    used = [...used, ...chars8.map(c => c.id)];
+    cards.push({
+      id: 8,
+      title: "Juntos Siempre 💖",
+      message: "Cada momento contigo es un tesoro que aprecio mucho.",
+      theme: kuromiMode ? kuromiThemes.pastel : themes.purple,
+      characters: chars8,
       musicTimestamp: 0,
       isPhotoGallery: true,
       photos: photoGalleries.gallery3
     });
 
     // Carta 8 - CUENTA REGRESIVA
-    const chars8 = getUniqueCharacters(used);
-    used = [...used, ...chars8.map(c => c.id)];
+    const chars9 = getUniqueCharacters(used);
+    used = [...used, ...chars9.map(c => c.id)];
     const monthNames = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 
                         'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
     const reunionDay = reunionDate.getDate();
@@ -282,7 +360,7 @@ const ValentineCard = () => {
     const reunionYear = reunionDate.getFullYear();
     
     cards.push({
-      id: 8,
+      id: 9,
       title: `${daysTogether} Días Juntos 💕`,
       message: `Desde aquel ${reunionDay} de ${reunionMonth} de ${reunionYear}, han pasado ${daysTogether} días increíbles. Cada momento contigo es un regalo que atesoro.`,
       theme: kuromiMode ? kuromiThemes.bubblegum : themes.neon,
@@ -290,14 +368,15 @@ const ValentineCard = () => {
       musicTimestamp: 0
     });
 
-    // Carta 9 - TU FOTO CON EL REGALO (ÚLTIMA) 🎁
-    const chars9 = getUniqueCharacters(used);
+
+    
+    const chars10 = getUniqueCharacters(used);
     cards.push({
-      id: 9,
+      id: 10,
       title: "Para Ti 💝",
       message: "Espero que estés disfrutando este día especial. Este regalo es solo una pequeña muestra de todo lo que significas para mí.",
       theme: kuromiMode ? kuromiThemes.kawaii : themes.blackPink,
-      characters: chars9,
+      characters: chars10,
       musicTimestamp: 0,
       isPhotoCard: true
     });
@@ -308,10 +387,12 @@ const ValentineCard = () => {
   const [cardsData, setCardsData] = useState([]);
 
   useEffect(() => {
-    setCardsData(generateCards());
-  }, [kuromiMode, daysTogether]);
+    if (imagesLoaded) {
+      setCardsData(generateCards());
+    }
+  }, [kuromiMode, daysTogether, imagesLoaded]);
 
-  // 🎵 CONTROL DE MÚSICA - Basado en musicTimestamp, no en índice
+  // 🎵 CONTROL DE MÚSICA
   const [hasTriggeredClimax, setHasTriggeredClimax] = useState(false);
 
   useEffect(() => {
@@ -319,13 +400,11 @@ const ValentineCard = () => {
     
     const currentCardTimestamp = cardsData[selectedIndex]?.musicTimestamp;
     
-    // Si la carta actual tiene un timestamp > 0, saltar ahí
     if (currentCardTimestamp > 0 && !hasTriggeredClimax) {
       audioRef.current.currentTime = currentCardTimestamp;
       setHasTriggeredClimax(true);
     }
     
-    // Resetear el flag si vuelves a la primera carta
     if (selectedIndex === 0 && hasTriggeredClimax) {
       setHasTriggeredClimax(false);
     }
@@ -377,6 +456,46 @@ const ValentineCard = () => {
   const currentCard = cardsData[selectedIndex] || cardsData[0];
   const theme = currentCard?.theme || themes.blackPink;
 
+  // 🔄 PANTALLA DE CARGA
+  if (!imagesLoaded) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-pink-950 via-rose-950 to-black flex flex-col items-center justify-center">
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 200 }}
+          className="text-center"
+        >
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            className="text-6xl lg:text-8xl mb-6"
+          >
+            💖
+          </motion.div>
+          
+          <h2 className="text-2xl lg:text-4xl font-serif text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-white to-pink-300 mb-4"
+              style={{ fontFamily: "'Playfair Display', serif" }}>
+            Preparando tu regalo...
+          </h2>
+          
+          <div className="w-64 lg:w-80 h-2 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
+            <motion.div
+              className="h-full bg-gradient-to-r from-pink-500 to-rose-500"
+              initial={{ width: 0 }}
+              animate={{ width: `${loadingProgress}%` }}
+              transition={{ duration: 0.3 }}
+            />
+          </div>
+          
+          <p className="mt-4 text-pink-200 text-lg">
+            {loadingProgress}%
+          </p>
+        </motion.div>
+      </div>
+    );
+  }
+
   if (cardsData.length === 0) {
     return <div className="min-h-screen bg-black flex items-center justify-center text-white">Cargando...</div>;
   }
@@ -427,7 +546,7 @@ const ValentineCard = () => {
                 className="text-5xl lg:text-8xl font-serif text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-white to-pink-300 mb-8"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
-                Para Ti
+                Para Mara
               </motion.h1>
 
               <motion.div
@@ -462,7 +581,7 @@ const ValentineCard = () => {
                 transition={{ delay: 1.5 }}
                 className="mt-8 text-pink-200 text-lg lg:text-xl"
               >
-                Usa audífonos para una mejor experiencia 🎧
+                Active el sonido del dispositivo para una mejor experiencia
               </motion.p>
             </div>
           </motion.div>
@@ -495,7 +614,7 @@ const ValentineCard = () => {
           </motion.button>
         )}
 
-        
+        {/* Botón Modo Kuromi */}
         {!showIntro && (
           <motion.button
             initial={{ scale: 0 }}
@@ -513,7 +632,6 @@ const ValentineCard = () => {
             {kuromiMode ? '💜 Kuromi Mode ON' : '🎀 Activate Kuromi Mode'}
           </motion.button>
         )}
-       
 
         {/* Efectos de fondo */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
@@ -540,7 +658,7 @@ const ValentineCard = () => {
             >
               {kuromiMode ? (
                 <img 
-                  src={kuromi} 
+                  src={kuromiImages[i % kuromiImages.length]} 
                   alt="Kuromi" 
                   className="w-full h-full object-contain filter drop-shadow-lg"
                   style={{ 
@@ -652,7 +770,7 @@ const ValentineCard = () => {
                               </div>
                             )}
 
-                            {/* 🎁 FOTO DEL REGALO (ÚLTIMA CARTA) */}
+                            {/* 🎁 FOTO DEL REGALO */}
                             {card.isPhotoCard && (
                               <motion.div
                                 initial={{ scale: 0, rotate: -10 }}
