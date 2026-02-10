@@ -282,7 +282,7 @@ const ValentineCard = () => {
       message: "Cada foto guarda un recuerdo especial de nosotros.",
       theme: kuromiMode ? kuromiThemes.kawaii : themes.blackPink,
       characters: chars3,
-      musicTimestamp: 124,
+      musicTimestamp: 0,
       isPhotoGallery: true,
       photos: photoGalleries.gallery1
     });
@@ -322,7 +322,7 @@ const ValentineCard = () => {
       message: "A veces no te entiendo, y está bien. Porque querer a alguien no es comprenderlo todo, es elegirlo incluso cuando no se entiende. Y yo, en ese tiempo, te elegí",
       theme: kuromiMode ? kuromiThemes.magenta : themes.gothic,
       characters: chars6,
-      musicTimestamp: 0
+      musicTimestamp: 124
     });
     
     const chars7 = getUniqueCharacters(used);
