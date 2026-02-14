@@ -35,6 +35,7 @@ import loquita from '/characters/loquita.jpg';
 import kuromi2 from '/characters/kuromi2.png';
 import kuromi3 from '/characters/kuromi3.png';
 import kuromi4 from '/characters/kuromi4.png';
+import regalo from '/characters/regalo.jpg';
 
 const ValentineCard = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
@@ -61,7 +62,7 @@ const ValentineCard = () => {
 
   const daysTogether = calculateDaysTogether();
 
-  // 🎭 POOL DE PERSONAJES - IDs ARREGLADOS ✅
+  // 🎭 POOL DE PERSONAJES
   const allCharacters = [
     { img: <img src={kuromi} alt="Kuromi" className="w-full h-full object-cover" />, id: 'char1' },
     { img: <img src={tomie} alt="Tomie" className="w-full h-full object-cover" />, id: 'char2' },
@@ -118,25 +119,22 @@ const ValentineCard = () => {
   // 🖼️ SISTEMA DE PRECARGA DE IMÁGENES
   useEffect(() => {
     const imagesToPreload = [
-      // Personajes importados
       kuromi, tomie, emergencychar, zenitsu, zenitsu2, fern1, fern2,
       hentai1, hentai2, hentai3, hentai4, hentai5, hentai6, hentai8, hentai9,
       hentai10, hentai11, junjiito1, junjiito2, junjiito3, junjiito4,
       maomao1, maomao2, mitsuri1, mitsuri2, mitsuri3, yumeko1,
       senku, toji, sunkenrock1, loquita, kuromi2, kuromi3, kuromi4,
-      // Fotos de galerías
       ...photoGalleries.gallery1,
       ...photoGalleries.gallery2,
       ...photoGalleries.gallery3,
-      // Foto del regalo
-      '/images/my-photo-heart.jpg'
+      regalo
     ];
 
     let loadedCount = 0;
     const totalImages = imagesToPreload.length;
 
     const preloadImage = (src) => {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         const img = new Image();
         img.onload = () => {
           loadedCount++;
@@ -147,7 +145,7 @@ const ValentineCard = () => {
           console.warn(`Failed to load: ${src}`);
           loadedCount++;
           setLoadingProgress(Math.round((loadedCount / totalImages) * 100));
-          resolve(); // Continuar aunque falle
+          resolve();
         };
         img.src = src;
       });
@@ -157,11 +155,11 @@ const ValentineCard = () => {
       .then(() => {
         setTimeout(() => {
           setImagesLoaded(true);
-        }, 500); // Pequeño delay para transición suave
+        }, 500);
       });
   }, []);
 
-  // 🎲 Función para obtener personajes únicos sin repetir (con reciclaje)
+  // 🎲 Función para obtener personajes únicos
   const getUniqueCharacters = (usedIds) => {
     let available = allCharacters.filter(char => !usedIds.includes(char.id));
     
@@ -255,7 +253,7 @@ const ValentineCard = () => {
     cards.push({
       id: 1,
       title: "Mara",
-      message: "Con vos sentí cosas que no me pasaron con nadie más no por lo perfecto, sino por lo real.Me gustaste cuando estabas bien y también cuando estabas hecha un caos.Me importás sin condiciones y sin promesas y aun así con todo el amor que me nace",
+      message: "Con vos sentí cosas que no me pasaron con nadie más no por lo perfecto, sino por lo real. Me gustaste cuando estabas bien y también cuando estabas hecha un caos. Me importás sin condiciones y sin promesas y aun así con todo el amor que me nace",
       theme: kuromiMode ? kuromiThemes.kawaii : themes.blackPink,
       characters: chars1,
       musicTimestamp: 0
@@ -267,13 +265,13 @@ const ValentineCard = () => {
     cards.push({
       id: 2,
       title: "Marita",
-      message: "Hay una versión tuya que aparece en los detalles chicos: en cómo mirás,en cómo te reís sin darte cuenta, en cómo te enojás y a los cinco minutos ya no. Esa versión tuya es la que se me quedó en el pecho.",
+      message: "Hay una versión tuya que aparece en los detalles chicos: en cómo mirás, en cómo te reís sin darte cuenta, en cómo te enojás y a los cinco minutos ya no. Esa versión tuya es la que se me quedó en el pecho.",
       theme: kuromiMode ? kuromiThemes.pastel : themes.horror,
       characters: chars2,
-      musicTimestamp:0
+      musicTimestamp: 0
     });
 
-    // Carta 3 - GALERÍA 1 📸 (CON CLÍMAX)
+    // Carta 3 - GALERÍA 1 📸
     const chars3 = getUniqueCharacters(used);
     used = [...used, ...chars3.map(c => c.id)];
     cards.push({
@@ -293,7 +291,7 @@ const ValentineCard = () => {
     cards.push({
       id: 4,
       title: "Sangrona",
-      message: "Me enamoré incluso de tu carácter. De tu forma de decir las cosas, de no maquillarlas, de ser intensa cuando algo te importa. Nunca quise que seas distinta. Solo quise aprender a querer lo que ya sos..",
+      message: "Me enamoré incluso de tu carácter. De tu forma de decir las cosas, de no maquillarlas, de ser intensa cuando algo te importa. Nunca quise que seas distinta. Solo quise aprender a querer lo que ya sos.",
       theme: kuromiMode ? kuromiThemes.lavender : themes.purple,
       characters: chars4,
       musicTimestamp: 0
@@ -325,34 +323,95 @@ const ValentineCard = () => {
       musicTimestamp: 124
     });
     
+    // Carta 7
     const chars7 = getUniqueCharacters(used);
     used = [...used, ...chars7.map(c => c.id)];
     cards.push({
       id: 7,
       title: "Mi pequeño microbio",
-      message: "Tenés esa forma tuya de hacerte la distraída mientras se me van los ojos a tus tetas y a cómo se te marca el culo sin ningún pudor. Tu ropa interior no es casualidad, es mensaje. Y esa parte tuya un poco exhibicionista, un poco pervertida, a mí me encanta.Jugás a provocar como si no importara, pero sabés muy bien lo que hacés y cómo me dejás.",
-      theme: kuromiMode ? kuromiThemes.magenta : themes.gothic,
+      message: "Tenés esa forma tuya de hacerte la distraída mientras se me van los ojos a tus tetas y a cómo se te marca el culo sin ningún pudor. Tu ropa interior no es casualidad, es mensaje. Y esa parte tuya un poco exhibicionista, un poco pervertida, a mí me encanta. Jugás a provocar como si no importara, pero sabés muy bien lo que hacés y cómo me dejás.",
+      theme: kuromiMode ? kuromiThemes.pastel : themes.horror,
       characters: chars7,
       musicTimestamp: 0
     });
 
-    // Carta 7 - GALERÍA 3 📸
+    // Carta 8 - GALERÍA 3 📸
     const chars8 = getUniqueCharacters(used);
     used = [...used, ...chars8.map(c => c.id)];
     cards.push({
       id: 8,
       title: "Juntos Siempre 💖",
       message: "Cada momento contigo es un tesoro que aprecio mucho.",
-      theme: kuromiMode ? kuromiThemes.pastel : themes.purple,
+      theme: kuromiMode ? kuromiThemes.kawaii : themes.purple,
       characters: chars8,
       musicTimestamp: 0,
       isPhotoGallery: true,
       photos: photoGalleries.gallery3
     });
 
-    // Carta 8 - CUENTA REGRESIVA
+    // Carta 9 - Genuino 🎀
     const chars9 = getUniqueCharacters(used);
     used = [...used, ...chars9.map(c => c.id)];
+    cards.push({
+      id: 9,
+      title: "Genuino",
+      message: "Este regalo no es para convencerte de nada. Es para mostrarte quién soy cuando te amo. Soy intenso, sí. Soy sensible, sí. A veces me pierdo en lo que siento, también. Pero cuando amo, amo de verdad. Y hoy, sin dramatismo, sin presión, sin condiciones… puedo decirlo claro: Estoy enamorado de vos. Si querés caminar conmigo, voy a estar. Si necesitás volar distinto, también voy a respetarlo. Porque el amor que siento no quiere atarte. Quiere ser genuino. Y eso es lo que sos para mí: algo genuino.",
+      theme: kuromiMode ? kuromiThemes.kawaii : themes.blackPink,
+      characters: chars9,
+      musicTimestamp: 0
+    });
+
+    // Carta 10 - Te Elijo 💕
+    const chars10 = getUniqueCharacters(used);
+    used = [...used, ...chars10.map(c => c.id)];
+    cards.push({
+      id: 10,
+      title: "Te Elijo",
+      message: "Amar no siempre es entender todo. Amar es elegir. Y yo te elijo. Te elijo cuando estamos bien. Te elijo cuando discutimos. Te elijo cuando no coincidimos. Te elijo incluso cuando no te entiendo del todo. Porque lo que siento por vos no es capricho, ni obsesión, ni costumbre. Es esa tranquilidad extraña que aparece cuando pienso en tu nombre. No necesito promesas eternas para sentir lo que siento. No necesito garantías para quererte. Solo necesito saber que lo que hay entre nosotros es real. Y lo es.",
+      theme: kuromiMode ? kuromiThemes.pastel : themes.purple,
+      characters: chars10,
+      musicTimestamp: 0
+    });
+
+    // Carta 11 - Enamorado 💖
+    const chars11 = getUniqueCharacters(used);
+    used = [...used, ...chars11.map(c => c.id)];
+    cards.push({
+      id: 11,
+      title: "Enamorado",
+      message: "No quiero escribirte desde el miedo. Quiero escribirte desde lo que siento hoy, ahora, sin vueltas: Estoy enamorado de vos. No de una idea tuya. No de lo que podría ser. Estoy enamorado de la que sos. De tu carácter que a veces choca y a veces abraza. De tu forma de mirar cuando algo te importa. De tus silencios cuando estás pensando demasiado. De tu risa cuando se te escapa sin filtro. No te quiero perfecta. Te quiero real. Y real sos incluso cuando estás enojada, confundida o intensa.",
+      theme: kuromiMode ? kuromiThemes.magenta : themes.gothic,
+      characters: chars11,
+      musicTimestamp: 0
+    });
+
+    // Carta 12 - Real 🌟
+    const chars12 = getUniqueCharacters(used);
+    used = [...used, ...chars12.map(c => c.id)];
+    cards.push({
+      id: 12,
+      title: "Real",
+      message: "No quiero escribirte algo perfecto. Quiero escribirte algo real. No soy el tipo más tranquilo cuando siente. No soy el más frío. No soy el que se hace el indiferente. Cuando algo me importa… me importa de verdad. Y vos me importás. No por lo que podrías ser. No por lo que imaginamos. Sino por lo que ya sos en mi vida. Me gusta cómo pensás. Me gusta cómo defendés lo que creés. Me gusta que no seas simple. No quiero una historia cómoda. Quiero una historia sincera.",
+      theme: kuromiMode ? kuromiThemes.lavender : themes.neon,
+      characters: chars12,
+      musicTimestamp: 0
+    });
+
+    // Carta 13 - Ahora ⏰
+    const chars13 = getUniqueCharacters(used);
+    used = [...used, ...chars13.map(c => c.id)];
+    cards.push({
+      id: 13,
+      title: "Ahora",
+      message: "No sé si esto es amor eterno. No sé si esto es destino. No sé si dentro de diez años vamos a recordar esto riéndonos. Lo único que sé es lo que siento ahora. Y ahora siento algo fuerte. Algo que no me deja indiferente. Algo que me hace escribirte así. Si esto es amor, quiero que sea libre. Que no sea presión. Que no sea miedo. Que sea elección. Yo te estoy eligiendo. Yo estoy acá. No a medias.",
+      theme: kuromiMode ? kuromiThemes.pastel : themes.horror,
+      characters: chars13,
+      musicTimestamp: 0
+    });
+
+    // Carta 14 - CUENTA REGRESIVA 📅
+    const chars14 = getUniqueCharacters(used);
+    used = [...used, ...chars14.map(c => c.id)];
     const monthNames = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 
                         'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
     const reunionDay = reunionDate.getDate();
@@ -360,23 +419,22 @@ const ValentineCard = () => {
     const reunionYear = reunionDate.getFullYear();
     
     cards.push({
-      id: 9,
+      id: 14,
       title: `${daysTogether} Días Juntos 💕`,
       message: `Desde aquel ${reunionDay} de ${reunionMonth} de ${reunionYear}, han pasado ${daysTogether} días increíbles. Cada momento contigo es un regalo que atesoro.`,
       theme: kuromiMode ? kuromiThemes.bubblegum : themes.neon,
-      characters: chars8,
+      characters: chars14,
       musicTimestamp: 0
     });
 
-
-    
-    const chars10 = getUniqueCharacters(used);
+    // Carta 15 - FOTO DEL REGALO (ÚLTIMA) 🎁
+    const chars15 = getUniqueCharacters(used);
     cards.push({
-      id: 10,
-      title: "Para Ti 💝",
+      id: 15,
+      title: "Para Mi AMOR 💝",
       message: "Espero que estés disfrutando este día especial. Este regalo es solo una pequeña muestra de todo lo que significas para mí.",
       theme: kuromiMode ? kuromiThemes.kawaii : themes.blackPink,
-      characters: chars10,
+      characters: chars15,
       musicTimestamp: 0,
       isPhotoCard: true
     });
@@ -781,7 +839,7 @@ const ValentineCard = () => {
                                 <div className="absolute -inset-2 bg-gradient-to-r from-pink-500 via-rose-500 to-pink-500 rounded-3xl blur-xl opacity-70" />
                                 <div className="relative w-48 h-48 sm:w-56 sm:h-56 lg:w-64 lg:h-64 rounded-3xl overflow-hidden border-4 border-pink-300/50 shadow-2xl">
                                   <img 
-                                    src="/images/my-photo-heart.jpg" 
+                                    src={regalo} 
                                     alt="Para ti" 
                                     className="w-full h-full object-cover"
                                   />
