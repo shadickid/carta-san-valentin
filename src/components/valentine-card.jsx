@@ -45,6 +45,7 @@ const ValentineCard = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const [adultMode, setAdultMode] = useState(false); // 🔥 Modo +18
   const audioRef = React.useRef(null);
   const kuromiImages = [kuromi4, kuromi2, kuromi3];
   
@@ -323,13 +324,15 @@ const ValentineCard = () => {
       musicTimestamp: 124
     });
     
-    // Carta 7
+    // Carta 7 - 🔥 CON DOS VERSIONES (elegante y explícita)
     const chars7 = getUniqueCharacters(used);
     used = [...used, ...chars7.map(c => c.id)];
     cards.push({
       id: 7,
       title: "Mi pequeño microbio",
-      message: "Tenés una forma muy tuya de provocar sin que parezca que lo hacés, como si no fuera intencional pero sabiendo perfectamente el efecto que generás, me atraés, sí, y no voy a fingir que no, pero lo que más me desarma no es solo tu cuerpo sino esa mezcla tuya de seguridad y juego, de carácter fuerte y sonrisa inesperada, porque no te deseo solo porque me gustás, te deseo porque sos vos, y eso para mí lo cambia todo.",
+      message: adultMode 
+        ? "Tenés esa forma tuya de hacerte la distraída mientras se me van los ojos a tus tetas y a cómo se te marca el culo sin ningún pudor. Tu ropa interior no es casualidad, es mensaje. Y esa parte tuya un poco exhibicionista, un poco pervertida, a mí me encanta. Jugás a provocar como si no importara, pero sabés muy bien lo que hacés y cómo me dejás."
+        : "Tenés una forma muy tuya de provocar sin que parezca que lo hacés, como si no fuera intencional pero sabiendo perfectamente el efecto que generás, me atraés, sí, y no voy a fingir que no, pero lo que más me desarma no es solo tu cuerpo sino esa mezcla tuya de seguridad y juego, de carácter fuerte y sonrisa inesperada, porque no te deseo solo porque me gustás, te deseo porque sos vos, y eso para mí lo cambia todo.",
       theme: kuromiMode ? kuromiThemes.pastel : themes.horror,
       characters: chars7,
       musicTimestamp: 0
@@ -448,7 +451,7 @@ const ValentineCard = () => {
     if (imagesLoaded) {
       setCardsData(generateCards());
     }
-  }, [kuromiMode, daysTogether, imagesLoaded]);
+  }, [kuromiMode, daysTogether, imagesLoaded, adultMode]); // ← Agregado adultMode
 
   // 🎵 CONTROL DE MÚSICA
   const [hasTriggeredClimax, setHasTriggeredClimax] = useState(false);
@@ -688,6 +691,26 @@ const ValentineCard = () => {
             }`}
           >
             {kuromiMode ? '💜 Kuromi Mode ON' : '🎀 Activate Kuromi Mode'}
+          </motion.button>
+        )}
+
+        {/* 🔥 BOTÓN +18 SECRETO */}
+        {!showIntro && (
+          <motion.button
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 1.4, type: "spring" }}
+            onClick={() => setAdultMode(!adultMode)}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className={`fixed bottom-4 left-4 z-50 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold transition-all duration-300 ${
+              adultMode 
+                ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white shadow-lg shadow-red-500/50' 
+                : 'bg-white/5 backdrop-blur-sm text-white/40 border border-white/10 hover:bg-white/10 hover:text-white/60'
+            }`}
+            title="Modo +18"
+          >
+            +18
           </motion.button>
         )}
 
