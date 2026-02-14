@@ -329,7 +329,7 @@ const ValentineCard = () => {
     cards.push({
       id: 7,
       title: "Mi pequeño microbio",
-      message: "Tenés esa forma tuya de hacerte la distraída mientras se me van los ojos a tus tetas y a cómo se te marca el culo sin ningún pudor. Tu ropa interior no es casualidad, es mensaje. Y esa parte tuya un poco exhibicionista, un poco pervertida, a mí me encanta. Jugás a provocar como si no importara, pero sabés muy bien lo que hacés y cómo me dejás.",
+      message: "Tenés una forma muy tuya de provocar sin que parezca que lo hacés, como si no fuera intencional pero sabiendo perfectamente el efecto que generás, me atraés, sí, y no voy a fingir que no, pero lo que más me desarma no es solo tu cuerpo sino esa mezcla tuya de seguridad y juego, de carácter fuerte y sonrisa inesperada, porque no te deseo solo porque me gustás, te deseo porque sos vos, y eso para mí lo cambia todo.",
       theme: kuromiMode ? kuromiThemes.pastel : themes.horror,
       characters: chars7,
       musicTimestamp: 0
