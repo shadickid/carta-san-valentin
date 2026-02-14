@@ -432,7 +432,7 @@ const ValentineCard = () => {
     cards.push({
       id: 15,
       title: "Para Mi AMOR 💝",
-      message: "Espero que estés disfrutando este día especial. Este regalo es solo una pequeña muestra de todo lo que significas para mí.",
+      message: "Espero que estés disfrutando este día especial. Este regalo es solo una pequeña muestra de todo lo que significas para mí. No escribí todo esto para impresionarte, lo escribí porque sos vos. Porque con vos quiero intentar algo real, y si se da, construirlo juntos.",
       theme: kuromiMode ? kuromiThemes.kawaii : themes.blackPink,
       characters: chars15,
       musicTimestamp: 0,
