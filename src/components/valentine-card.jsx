@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useEmblaCarousel from 'embla-carousel-react';
+import { Analytics } from '@vercel/analytics/react';
 import kuromi from '/characters/kuromi.webp';
 import tomie from '/characters/junjiito4.png';
 import emergencychar from '/characters/hentai7.png';
@@ -50,7 +51,7 @@ const ValentineCard = () => {
   const kuromiImages = [kuromi4, kuromi2, kuromi3];
   
   // ⏰ FECHA DE REENCUENTRO - 12 de julio 2024
-  const reunionDate = new Date(2025, 6, 12); 
+  const reunionDate = new Date(2024, 6, 12); 
 
   const calculateDaysTogether = () => {
     const today = new Date();
@@ -958,6 +959,7 @@ const ValentineCard = () => {
           @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:wght@300;400&family=Creepster&display=swap');
         `}</style>
       </div>
+      <Analytics />
     </>
   );
 };
