@@ -51,7 +51,7 @@ const ValentineCard = () => {
   const kuromiImages = [kuromi4, kuromi2, kuromi3];
   
   // ⏰ FECHA DE REENCUENTRO - 12 de julio 2024
-  const reunionDate = new Date(2024, 6, 12); 
+  const reunionDate = new Date(2025, 6, 12); 
 
   const calculateDaysTogether = () => {
     const today = new Date();
